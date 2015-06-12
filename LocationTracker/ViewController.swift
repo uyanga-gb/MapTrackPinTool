@@ -19,9 +19,10 @@ enum MapType: Int {
     case Satellite
 }
 
-class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, ViewControllerDelegate {
 
     var pins = [Pin]()
+    var pinAll = Pin.all()
     var new_title = ""
     var new_subtitle = ""
     var controller: UIImagePickerController?
@@ -29,6 +30,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     var photo = UIImage?()
     var currentAnnotation = MKAnnotation?()
 //    let server = Requests(server: "http://192.168.1.95:8000/")
+    var pinToAdd: Pin?
+    weak var delegate: ViewControllerDelegate?
     
     @IBOutlet weak var titleText: UITextField!
     
@@ -65,6 +68,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     var lastLocationError: NSError?
     var location: CLLocation?
     var newRegion: MKCoordinateRegion?
+    var myPins: NSObject?
     
     @IBAction func mapType(sender: UISegmentedControl) {
         let mapType = MapType(rawValue: segmentedControl.selectedSegmentIndex)
@@ -79,18 +83,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
             break
         }
     }
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
+//    override func viewWillAppear(animated: Bool) {
+//        super.viewWillAppear(animated)
+    
+//        if let urlToReq = NSURL(string: "http://192.168.1.95:8000/pins") {
+//            if let data = NSData(contentsOfURL: urlToReq) {
+////                println("data \(data)")
+//                let arrOfPins = parseJSON(data)
         
-        if let urlToReq = NSURL(string: "http://192.168.1.95:8000/pins") {
-            println("urlToReq \(urlToReq)")
-//            println("hello \(NSData(contentsOfURL: urlToReq))")
-            if let data = NSData(contentsOfURL: urlToReq) {
-//                println("data \(data)")
-                let arrOfPins = parseJSON(data)
-                
-                println(arrOfPins)
-                
+//                println(arrOfPins)
+        
 //                for pin in arrOfPins {
 //                    let object = pin as! NSDictionary
 //                    
@@ -103,15 +105,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
                     //                        let pin = Pin(title: pinTitle, subtitle: pinSubtitle, image: pinImage, lat: pinLat, long: pinLong)
                     //                        pins.append(pin)
 //                }
-            }
-        }
-        
+//            }
+//        }
+    
 //        server.getRequestWithReturnedArray(relativeUrl: "/pins") {
 //            data in
 //            println(data)
 //        }
         
-    }
+//    }
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -149,11 +151,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         tapper.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapper);
     }
-    func parseJSON(inputData: NSData) -> NSArray {
-        var error: NSError?
-        var arrOfObjects = NSJSONSerialization.JSONObjectWithData(inputData, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSArray
-        return arrOfObjects
-    }
+//    func parseJSON(inputData: NSData) -> NSArray {
+//        var error: NSError?
+//        var arrOfObjects = NSJSONSerialization.JSONObjectWithData(inputData, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSArray
+//        return arrOfObjects
+//    }
     func locationManager(manager:CLLocationManager, didUpdateLocations locations:[AnyObject]) {
 //        userLocationUpdated = true
         theLabel.text = "\(locations[0])"
@@ -175,7 +177,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
             theMap.addOverlay(polyline)
         }
     }
-    
+    func viewController(controller: ViewController, didFinishAddingPin pin: Pin) {
+        dismissViewControllerAnimated(true, completion: nil)
+        pinAll = Pin.all()
+    }
+
     func stopLocationManager() {
         if userLocationUpdated {
             manager.stopUpdatingLocation()
@@ -189,7 +195,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     func mapView(mapView: MKMapView!, rendererForOverlay overlay: MKOverlay!) -> MKOverlayRenderer! {
         if overlay is MKPolyline {
             var polylineRenderer = MKPolylineRenderer(overlay: overlay)
-            polylineRenderer.strokeColor = UIColor.greenColor()
+            polylineRenderer.strokeColor = UIColor.blueColor()
             polylineRenderer.lineWidth = 4
             return polylineRenderer
         }
@@ -204,6 +210,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         }
         let reuseId = "test"
         var anView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId)
+//        anView.frameForAlignmentRect(CGRectMake(10, 10, 50, 50))
         if anView == nil
         {
             anView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
@@ -268,8 +275,29 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
 //            longitude: annotation.coordinate.longitude
 //        )
         mapView(theMap, viewForAnnotation: annotation)
+        let newPin = Pin(pinTitle: annotation.title, pinSubtitle: annotation.subtitle) //change from String to Item type to confrom to protocol with db
+//            println(newPin.title)
+            newPin.save()
+        //save new item to db
+//            delegate?.viewController(self, didFinishAddingPin: newPin)
+    
+
+
+//            if let urlToReq = NSURL(string: "http://192.168.1.95:8000/pins") {
+//                var request: NSMutableURLRequest = NSMutableURLRequest(URL: urlToReq)
+//                request.HTTPMethod = "POST"
+//                var bodyData = "name=\(annotation.title)&subtitle=\(annotation.subtitle)&image=\(annotation.subtitle)&lat=\(annotation.coordinate.latitude)&long=\(annotation.coordinate.longitude)"
+//                println(bodyData)
+//                request.HTTPBody = bodyData.dataUsingEncoding(NSUTF8StringEncoding);
+//                NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {
+//                    (response, data, error) in
+//                    println(NSString(data: data, encoding: NSUTF8StringEncoding))
+//                }
+//            }
         theMap.addAnnotation(annotation)
+//        delegate?.mainViewController(self, didFinishAddingPin: myAnnotations)
     }
+
 //    func userLocationSelected(getstureRecognizer : UIGestureRecognizer) {
 //        if getstureRecognizer.state != .Began { return }
 //        let touchLocation = getstureRecognizer.locationInView(self.theMap)
@@ -331,12 +359,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
                                 var imageData = UIImagePNGRepresentation(theImage)
                                 var base64String = imageData.base64EncodedStringWithOptions(.allZeros)
                                 myPhotos.append(base64String)
-                                
 //                                photo = snapShot.image!
 //                               imageView.image = theImage
-                                
 //                                snapShot.image = imageView.image
-                                
                             }
                         }
                     }
