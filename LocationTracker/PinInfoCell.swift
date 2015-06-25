@@ -8,7 +8,6 @@
 
 import UIKit
 class PinInfoCell: UITableViewCell{
-    
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightLabel: UILabel!
 }

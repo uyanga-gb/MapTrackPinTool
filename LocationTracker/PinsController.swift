@@ -9,6 +9,7 @@
 import UIKit
 
 class PinsViewController: UITableViewController, CancelButtonDelegate, PinControllerDelegate {
+    
     var pins = Pin.all()
     
     weak var pinControllerDelegate : PinControllerDelegate?
@@ -23,10 +24,9 @@ class PinsViewController: UITableViewController, CancelButtonDelegate, PinContro
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        pins = Pin.all()
-//        println(pins)
-
         tableView.reloadData()
+//        pins.removeAtIndex(2)
+        
     }
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 //        println(pins)
@@ -35,13 +35,22 @@ class PinsViewController: UITableViewController, CancelButtonDelegate, PinContro
         // since the method returns an AnyObject, we have to cast it to UITableViewCell
         let cell = dequeued as! UITableViewCell
         // if the cell has a text label, set it to the model that is corresponding to the row in array
-        cell.textLabel?.text = pins[indexPath.row].title
-        cell.textLabel?.text = pins[indexPath.row].subtitle
-        var image : UIImage = UIImage(named: "camera")!
-        println("The loaded image: \(image)")
-        cell.imageView!.image = image
-
-        
+        cell.textLabel?.text = pins[indexPath.row].objTitle
+                cell.detailTextLabel?.text = pins[indexPath.row].objSubtitle
+//        var image : UIImage = UIImage(named: "camera")!
+        if let photo = pins[indexPath.row].photo {
+            let decodedData = NSData(base64EncodedString: photo, options: NSDataBase64DecodingOptions(rawValue: 0))
+            var decodedimage = UIImage(data: decodedData!)
+            if let image = decodedimage {
+                var image : UIImage = decodedimage!
+                cell.imageView!.transform = CGAffineTransformMakeRotation((90.0 * CGFloat(M_PI)) / 180.0)
+                cell.imageView!.image = image
+            }
+            else {
+                cell.imageView!.image = UIImage(named: "camera")
+            }
+            
+        }
         // return cell so that Table View knows what to draw in each row
         return cell
     }
@@ -65,13 +74,12 @@ class PinsViewController: UITableViewController, CancelButtonDelegate, PinContro
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "EditPin" {
-            println("edit mission clicked")
             let navigationController = segue.destinationViewController as! UINavigationController
             let controller = navigationController.topViewController as! PinToEditController
             controller.cancelButtonDelegate = self
             controller.delegate = self
             if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
-                println(pins[indexPath.row])
+//                println(pins[indexPath.row])
 //                controller.delegate = self
                 controller.pinToEdit = pins[indexPath.row]
             }

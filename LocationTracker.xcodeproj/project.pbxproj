@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		F12288BA1B2A954400C8438E /* PinInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12288B91B2A954400C8438E /* PinInfoCell.swift */; };
 		F12288BC1B2A997200C8438E /* PinToEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12288BB1B2A997200C8438E /* PinToEditController.swift */; };
+		F158418E1B2BFC8A004C1DDE /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F158418D1B2BFC8A004C1DDE /* ImageViewController.swift */; };
+		F16525F71B34FA630024A345 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F16525F61B34FA630024A345 /* CoreData.framework */; };
+		F16FCAE21B350DC600CDA9B5 /* LocationTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F16FCAE01B350DC600CDA9B5 /* LocationTracker.xcdatamodeld */; };
+		F16FCAEA1B35333C00CDA9B5 /* Waypoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16FCAE91B35333C00CDA9B5 /* Waypoints.swift */; };
 		F1BE99BC1B127C1F00194B1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BE99BB1B127C1F00194B1D /* AppDelegate.swift */; };
 		F1BE99BE1B127C1F00194B1D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BE99BD1B127C1F00194B1D /* ViewController.swift */; };
 		F1BE99C11B127C1F00194B1D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1BE99BF1B127C1F00194B1D /* Main.storyboard */; };
@@ -38,6 +42,11 @@
 /* Begin PBXFileReference section */
 		F12288B91B2A954400C8438E /* PinInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinInfoCell.swift; sourceTree = "<group>"; };
 		F12288BB1B2A997200C8438E /* PinToEditController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinToEditController.swift; sourceTree = "<group>"; };
+		F158418D1B2BFC8A004C1DDE /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		F16525F61B34FA630024A345 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		F16525F81B34FC4C0024A345 /* Directions.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = Directions.geojson; sourceTree = "<group>"; };
+		F16FCAE11B350DC600CDA9B5 /* LocationTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LocationTracker.xcdatamodel; sourceTree = "<group>"; };
+		F16FCAE91B35333C00CDA9B5 /* Waypoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Waypoints.swift; sourceTree = "<group>"; };
 		F1BE99B61B127C1F00194B1D /* LocationTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocationTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1BE99BA1B127C1F00194B1D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F1BE99BB1B127C1F00194B1D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F16525F71B34FA630024A345 /* CoreData.framework in Frameworks */,
 				F1BE99DC1B128F5800194B1D /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -80,6 +90,8 @@
 		F1BE99AD1B127C1F00194B1D = {
 			isa = PBXGroup;
 			children = (
+				F16FCAE91B35333C00CDA9B5 /* Waypoints.swift */,
+				F16525F61B34FA630024A345 /* CoreData.framework */,
 				F1BE99DB1B128F5800194B1D /* MapKit.framework */,
 				F1BE99B81B127C1F00194B1D /* LocationTracker */,
 				F1BE99CE1B127C1F00194B1D /* LocationTrackerTests */,
@@ -100,20 +112,23 @@
 			isa = PBXGroup;
 			children = (
 				F1BE99BB1B127C1F00194B1D /* AppDelegate.swift */,
+				F1BE99BD1B127C1F00194B1D /* ViewController.swift */,
+				F158418D1B2BFC8A004C1DDE /* ImageViewController.swift */,
+				F12288BB1B2A997200C8438E /* PinToEditController.swift */,
+				F1CADD251B1FE2D2004D6781 /* PinsController.swift */,
 				F1CADD2B1B20087B004D6781 /* PinControllerDelegate.swift */,
 				F1C2AE461B21715100D34118 /* ViewControllerDelegate.swift */,
-				F12288BB1B2A997200C8438E /* PinToEditController.swift */,
 				F1FCDC9A1B2A8DC800D0BE0E /* CancelButtonDelegate.swift */,
-				F1CADD251B1FE2D2004D6781 /* PinsController.swift */,
-				F1BE99BD1B127C1F00194B1D /* ViewController.swift */,
 				F1CADD291B1FED7B004D6781 /* Pin.swift */,
+				F12288B91B2A954400C8438E /* PinInfoCell.swift */,
 				F1CADD271B1FEC56004D6781 /* Database.swift */,
 				F1BE99BF1B127C1F00194B1D /* Main.storyboard */,
 				F1BE99C21B127C1F00194B1D /* Images.xcassets */,
 				F1BE99C41B127C1F00194B1D /* LaunchScreen.xib */,
 				F1C455A61B1FD42100FDBC5B /* RequestsFramework.swift */,
 				F1BE99B91B127C1F00194B1D /* Supporting Files */,
-				F12288B91B2A954400C8438E /* PinInfoCell.swift */,
+				F16525F81B34FC4C0024A345 /* Directions.geojson */,
+				F16FCAE01B350DC600CDA9B5 /* LocationTracker.xcdatamodeld */,
 			);
 			path = LocationTracker;
 			sourceTree = "<group>";
@@ -243,16 +258,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F16FCAE21B350DC600CDA9B5 /* LocationTracker.xcdatamodeld in Sources */,
 				F1CADD2A1B1FED7B004D6781 /* Pin.swift in Sources */,
 				F12288BA1B2A954400C8438E /* PinInfoCell.swift in Sources */,
 				F1C2AE471B21715100D34118 /* ViewControllerDelegate.swift in Sources */,
 				F1CADD281B1FEC56004D6781 /* Database.swift in Sources */,
 				F12288BC1B2A997200C8438E /* PinToEditController.swift in Sources */,
 				F1CADD261B1FE2D2004D6781 /* PinsController.swift in Sources */,
+				F158418E1B2BFC8A004C1DDE /* ImageViewController.swift in Sources */,
 				F1CADD2C1B20087B004D6781 /* PinControllerDelegate.swift in Sources */,
 				F1C455A71B1FD42100FDBC5B /* RequestsFramework.swift in Sources */,
 				F1BE99BE1B127C1F00194B1D /* ViewController.swift in Sources */,
 				F1BE99BC1B127C1F00194B1D /* AppDelegate.swift in Sources */,
+				F16FCAEA1B35333C00CDA9B5 /* Waypoints.swift in Sources */,
 				F1FCDC9B1B2A8DC800D0BE0E /* CancelButtonDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -461,6 +479,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		F16FCAE01B350DC600CDA9B5 /* LocationTracker.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F16FCAE11B350DC600CDA9B5 /* LocationTracker.xcdatamodel */,
+			);
+			currentVersion = F16FCAE11B350DC600CDA9B5 /* LocationTracker.xcdatamodel */;
+			path = LocationTracker.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = F1BE99AE1B127C1F00194B1D /* Project object */;
 }

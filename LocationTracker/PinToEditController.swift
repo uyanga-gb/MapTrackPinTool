@@ -19,11 +19,15 @@ class PinToEditController: UITableViewController, UITextFieldDelegate {
     }
     
     @IBOutlet weak var newPinTextField: UITextField!
+    @IBOutlet weak var newPinSubtitleTextField: UITextField!
     @IBOutlet weak var txtTest: UITextField! = nil
+    @IBOutlet weak var txtSubTest: UITextField! = nil
     
     @IBAction func doneBarButtonPressed(sender: UIBarButtonItem) {
         if let pin = pinToEdit {
-            pin.title = newPinTextField.text
+            pin.objTitle = newPinTextField.text
+           
+            pin.objSubtitle = newPinSubtitleTextField.text
             pin.save()
             delegate?.pinController(self, didFinishEditingPin: pin)
         }
@@ -31,16 +35,19 @@ class PinToEditController: UITableViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         txtTest.delegate = self
+        txtSubTest.delegate = self
         let tapper = UITapGestureRecognizer(target: self.view, action:Selector("endEditing:"))
         tapper.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapper);
         
         if let pin = pinToEdit {
-            newPinTextField.text = pin.title
+            newPinTextField.text = pin.objTitle
+            newPinSubtitleTextField.text = pin.objSubtitle
         }
     }
     func textFieldShouldReturn(newPinTestField: UITextField) -> Bool {
         newPinTextField.resignFirstResponder()
+        newPinSubtitleTextField.resignFirstResponder()
         return true
     }
 }

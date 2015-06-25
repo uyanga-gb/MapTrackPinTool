@@ -7,61 +7,75 @@
 //
 
 import Foundation
+import UIKit
+import MapKit
 
-class Pin: NSObject, NSCoding {
-    static var key: String = "Pins"
+class Pin: NSObject, NSCoding, MKAnnotation {
+    static var key: String = "Pin"
     static var schema: String = "theList"
-    var title: String
-    var subtitle: String
+    var objTitle: String
+    var objSubtitle: String
+    var latitude: Double
+    var longitude: Double
+    var coordinate: CLLocationCoordinate2D
+    var photo: UIImage?
     var createdAt: NSDate
     // use this init for creating a new Task
-    init(pinTitle: String, pinSubtitle: String) {
-        title = pinTitle
-        subtitle = pinSubtitle
-        createdAt = NSDate()
+    init(pinTitle: String, pinSubtitle: String, pinLatitude: Double, pinLongitude: Double, coordinate: CLLocationCoordinate2D) {
+        self.objTitle = pinTitle
+        self.objSubtitle = pinSubtitle
+        self.latitude = pinLatitude
+        self.longitude = pinLongitude
+        self.coordinate = coordinate
+        self.createdAt = NSDate()
     }
     // MARK: - NSCoding protocol
     // used for encoding (saving) objects
     func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(title, forKey: "title")
-        aCoder.encodeObject(subtitle, forKey: "subtitle")
+        aCoder.encodeObject(objTitle, forKey: "objTitle")
+        aCoder.encodeObject(objSubtitle, forKey: "objSubtitle")
+        aCoder.encodeObject(latitude, forKey: "latitude")
+        aCoder.encodeObject(longitude, forKey: "longitude")
+        aCoder.encodeObject(coordinate.latitude, forKey: "CoorLatitude")
+        aCoder.encodeObject(coordinate.longitude, forKey: "CoorLongitude")
+        aCoder.encodeObject(photo, forKey: "photo")
         aCoder.encodeObject(createdAt, forKey: "createdAt")
     }
     // used for decoding (loading) objects
     required init(coder aDecoder: NSCoder) {
-        title = aDecoder.decodeObjectForKey("title") as! String
-        subtitle = aDecoder.decodeObjectForKey("subtitle") as! String
+        objTitle = aDecoder.decodeObjectForKey("objTitle") as! String
+        objSubtitle = aDecoder.decodeObjectForKey("objSubtitle") as! String
+        latitude = aDecoder.decodeObjectForKey("latitude") as! Double
+        longitude = aDecoder.decodeObjectForKey("longitude") as! Double
+        coordinate = aDecoder.decodeObjectForKey("CoorLatitude") as! CLLocationCoordinate2D
+        coordinate = aDecoder.decodeObjectForKey("CoorLongitude") as! CLLocationCoordinate2D
+        photo = aDecoder.decodeObjectForKey("photo") as? UIImage
         createdAt = aDecoder.decodeObjectForKey("createdAt") as! NSDate
         super.init()
     }
     // MARK: - Queries
     static func all() -> [Pin] {
-        var pins = [Pin]()
-        
+        var pin = [Pin]()
         let path = Database.dataFilePath("theList")
         if NSFileManager.defaultManager().fileExistsAtPath(path) {
             if let data = NSData(contentsOfFile: path) {
                 let unarchiver = NSKeyedUnarchiver(forReadingWithData: data)
-                pins = unarchiver.decodeObjectForKey(Pin.key) as! [Pin]
+                pin = unarchiver.decodeObjectForKey(Pin.key) as! [Pin]
                 unarchiver.finishDecoding()
-                println(pins)
             }
         }
-        println(pins[1].subtitle)
-        return pins
+        return pin
     }
     func save() {
         var pinsFromStorage = Pin.all()
         var exists = false
         for var i = 0; i < pinsFromStorage.count; ++i {
-            println("cheching exist true")
             if pinsFromStorage[i].createdAt == self.createdAt {
                 pinsFromStorage[i] = self
                 exists = true
             }
         }
         if !exists {
-            println("if not exist")
             pinsFromStorage.append(self)
         }
         Database.save(pinsFromStorage, toSchema: Pin.schema, forKey: Pin.key)
