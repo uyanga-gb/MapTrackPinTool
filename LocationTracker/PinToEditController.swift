@@ -26,7 +26,6 @@ class PinToEditController: UITableViewController, UITextFieldDelegate {
     @IBAction func doneBarButtonPressed(sender: UIBarButtonItem) {
         if let pin = pinToEdit {
             pin.objTitle = newPinTextField.text
-           
             pin.objSubtitle = newPinSubtitleTextField.text
             pin.save()
             delegate?.pinController(self, didFinishEditingPin: pin)

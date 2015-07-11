@@ -10,23 +10,26 @@ import Foundation
 import UIKit
 import MapKit
 
-class Pin: NSObject, NSCoding, MKAnnotation {
+class Pin: NSObject, NSCoding {
     static var key: String = "Pin"
     static var schema: String = "theList"
     var objTitle: String
     var objSubtitle: String
-    var latitude: Double
-    var longitude: Double
-    var coordinate: CLLocationCoordinate2D
+    var latitude: CLLocationDegrees
+    var longitude: CLLocationDegrees
+//    var coordinate: CLLocationCoordinate2D {
+//        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+//    }
     var photo: UIImage?
     var createdAt: NSDate
     // use this init for creating a new Task
-    init(pinTitle: String, pinSubtitle: String, pinLatitude: Double, pinLongitude: Double, coordinate: CLLocationCoordinate2D) {
+    init(pinTitle: String, pinSubtitle: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, photo: UIImage) {
         self.objTitle = pinTitle
         self.objSubtitle = pinSubtitle
-        self.latitude = pinLatitude
-        self.longitude = pinLongitude
-        self.coordinate = coordinate
+        self.latitude = latitude
+        self.longitude = longitude
+//        coordinate = coordinate
+        self.photo = photo
         self.createdAt = NSDate()
     }
     // MARK: - NSCoding protocol
@@ -36,8 +39,8 @@ class Pin: NSObject, NSCoding, MKAnnotation {
         aCoder.encodeObject(objSubtitle, forKey: "objSubtitle")
         aCoder.encodeObject(latitude, forKey: "latitude")
         aCoder.encodeObject(longitude, forKey: "longitude")
-        aCoder.encodeObject(coordinate.latitude, forKey: "CoorLatitude")
-        aCoder.encodeObject(coordinate.longitude, forKey: "CoorLongitude")
+//        aCoder.encodeObject(coordinate.latitude, forKey: "objLatitude")
+//        aCoder.encodeObject(coordinate.longitude, forKey: "objLongitude")
         aCoder.encodeObject(photo, forKey: "photo")
         aCoder.encodeObject(createdAt, forKey: "createdAt")
     }
@@ -45,10 +48,10 @@ class Pin: NSObject, NSCoding, MKAnnotation {
     required init(coder aDecoder: NSCoder) {
         objTitle = aDecoder.decodeObjectForKey("objTitle") as! String
         objSubtitle = aDecoder.decodeObjectForKey("objSubtitle") as! String
-        latitude = aDecoder.decodeObjectForKey("latitude") as! Double
-        longitude = aDecoder.decodeObjectForKey("longitude") as! Double
-        coordinate = aDecoder.decodeObjectForKey("CoorLatitude") as! CLLocationCoordinate2D
-        coordinate = aDecoder.decodeObjectForKey("CoorLongitude") as! CLLocationCoordinate2D
+//        latitude = aDecoder.decodeObjectForKey("latitude") as! Double
+//        longitude = aDecoder.decodeObjectForKey("longitude") as! Double
+        latitude = aDecoder.decodeObjectForKey("latitude") as! CLLocationDegrees
+        longitude = aDecoder.decodeObjectForKey("longitude") as! CLLocationDegrees
         photo = aDecoder.decodeObjectForKey("photo") as? UIImage
         createdAt = aDecoder.decodeObjectForKey("createdAt") as! NSDate
         super.init()
