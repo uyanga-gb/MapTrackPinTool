@@ -25,8 +25,8 @@ class PinToEditController: UITableViewController, UITextFieldDelegate {
     
     @IBAction func doneBarButtonPressed(sender: UIBarButtonItem) {
         if let pin = pinToEdit {
-            pin.objTitle = newPinTextField.text
-            pin.objSubtitle = newPinSubtitleTextField.text
+            pin.title = newPinTextField.text
+            pin.subtitle = newPinSubtitleTextField.text
             pin.save()
             delegate?.pinController(self, didFinishEditingPin: pin)
         }
@@ -40,8 +40,8 @@ class PinToEditController: UITableViewController, UITextFieldDelegate {
         self.view.addGestureRecognizer(tapper);
         
         if let pin = pinToEdit {
-            newPinTextField.text = pin.objTitle
-            newPinSubtitleTextField.text = pin.objSubtitle
+            newPinTextField.text = pin.title
+            newPinSubtitleTextField.text = pin.subtitle
         }
     }
     func textFieldShouldReturn(newPinTestField: UITextField) -> Bool {

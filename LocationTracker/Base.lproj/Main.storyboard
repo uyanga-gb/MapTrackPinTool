@@ -193,15 +193,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qTD-ag-xYl">
-                                <rect key="frame" x="16" y="72" width="382" height="664"/>
+                                <rect key="frame" x="7" y="77" width="401" height="644"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="qTD-ag-xYl" firstAttribute="top" secondItem="njh-Q9-IyG" secondAttribute="topMargin" constant="72" id="TaW-sW-yvE"/>
-                            <constraint firstItem="qTD-ag-xYl" firstAttribute="leading" secondItem="njh-Q9-IyG" secondAttribute="leadingMargin" id="VmZ-vU-i3N"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="qTD-ag-xYl" secondAttribute="bottom" id="g44-4i-Hat"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="qTD-ag-xYl" secondAttribute="trailing" id="mAD-jS-SH4"/>
+                            <constraint firstItem="qTD-ag-xYl" firstAttribute="top" secondItem="L5i-FU-c7Q" secondAttribute="bottom" constant="13" id="Tsc-lB-bAD"/>
+                            <constraint firstItem="qTD-ag-xYl" firstAttribute="leading" secondItem="njh-Q9-IyG" secondAttribute="leadingMargin" constant="-9" id="VmZ-vU-i3N"/>
+                            <constraint firstItem="qTD-ag-xYl" firstAttribute="trailing" secondItem="njh-Q9-IyG" secondAttribute="trailingMargin" constant="10" id="kbu-X0-m8b"/>
+                            <constraint firstItem="vf0-n2-tOm" firstAttribute="top" secondItem="qTD-ag-xYl" secondAttribute="bottom" constant="15" id="pZD-fh-riC"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Pin Photo" id="TRk-AI-83d"/>

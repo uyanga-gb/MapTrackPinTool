@@ -20,20 +20,17 @@ enum MapType: Int {
 }
 
 class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-
+ 
     var pin = [Pin]()
     var pinAll = Pin.all()
     var new_title = ""
     var new_subtitle = ""
     var controller: UIImagePickerController?
-    var pinWithImage: Pin?
-   
     var imageView = UIImageView(frame: CGRectMake(20, 20, 50, 50))
-    var image = UIImageView(frame: CGRectMake(20, 20, 50, 50))
-    var photo = UIImage?()
-//    let server = Requests(server: "http://192.168.1.95:8000/")
-    
     weak var delegate: ViewControllerDelegate?
+    
+//    let server = Requests(server: "http://192.168.1.95:8000/") //used for connection with node.js server
+    
     
     @IBOutlet weak var titleText: UITextField!
     
@@ -85,22 +82,26 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     var lastLocationError: NSError?
     var location: CLLocation?
     var newRegion: MKCoordinateRegion?
-    var myPins: NSObject?
-//    struct MKCoordinateRegion {
-//        var center: CLLocationCoordinate2D
-//        var span: MKCoordinateSpan
-//    }
-//    struct MKCoordinateSpan {
-//        var latitudeDelta: CLLocationDegrees
-//        var longitudeDelta: CLLocationDegrees
-//    }
-//    func setRegion(MKCoordinateRegion, animated: Bool) {
-//
-//    }
+    var polyline: MKPolyline?
+
+    override func viewDidAppear(animated: Bool) {
     
+            self.showPinsCenter()
+        theMap.showAnnotations(pinAll, animated: true)
+    }
    
     override func viewDidLoad() {
         super.viewDidLoad()
+//        var trackAlert = UIAlertController(title: "Location Tracking", message: "Do you want to track your route?", preferredStyle: UIAlertControllerStyle.Alert)
+//        
+//        trackAlert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action: UIAlertAction!) in
+//            
+//            self.createPolyline()
+//        }))
+//        trackAlert.addAction(UIAlertAction(title: "No", style: .Default, handler: { (action: UIAlertAction!) in
+////            self.removePolyline(self.polyline!)
+//        }))
+//        presentViewController(trackAlert, animated: true, completion: nil)
 
         manager = CLLocationManager()
         manager.delegate = self
@@ -118,104 +119,68 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
             location = nil
             lastLocationError = nil
         }
-//        updateUI()
-        
-        self.showPinsCenter()
-        
+
         theMap.delegate = self
         theMap.showsUserLocation = true
-//        var doubleClick = UITapGestureRecognizer(target: theMap.showsUserLocation, action: "userLocationSelected")
-//        doubleClick.numberOfTapsRequired = 2
-//        theMap.addGestureRecognizer(doubleClick)
         addTitleOutlet.hidden = true
         addSubtitleOutlet.hidden = true
-//        var longPressRecogniser = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
         var longPressRecogniser = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
         titleText.hidden = true
         subtitleText.hidden = true
         
         longPressRecogniser.minimumPressDuration = 1.0
         theMap.addGestureRecognizer(longPressRecogniser)
-        
         let tapper = UITapGestureRecognizer(target: self.view, action:Selector("endEditing:"))
         tapper.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapper);
+        
+//        var doubleClick = UITapGestureRecognizer(target: theMap.showsUserLocation, action: "userLocationSelected")
+//        doubleClick.numberOfTapsRequired = 2
+//        theMap.addGestureRecognizer(doubleClick)
+//        var longPressRecogniser = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
+        
     }
+    
     func showPinsCenter() {
         var allLatArray : [CLLocationDegrees] = []
         var allLongArray : [CLLocationDegrees] = []
 
         for pin in pinAll {
-            var annotation = MKPointAnnotation()
             allLatArray.append(pin.latitude)
             allLongArray.append(pin.longitude)
-            println("inside showPinsCenter function \(allLatArray)")
-            annotation.title = pin.objTitle
-            annotation.subtitle = pin.objSubtitle
-            
-            var pinLocation : CLLocationCoordinate2D = CLLocationCoordinate2DMake(pin.latitude, pin.longitude)
-            annotation.coordinate = pinLocation
-//                        mapView(theMap, viewForAnnotation: annotation)
-            theMap.addAnnotation(annotation)
-            mapView(theMap, viewForAnnotation: annotation)
-            //            theMap.centerCoordinate = annotation.coordinate
-//            self.mapView(theMap, viewForAnnotation: annotation)
         }
-        
         allLatArray.sort() {
             $0 < $1
         }
-        println("after lats sorted still in showPinsCenter \(allLatArray)")
-        
+       
         allLongArray.sort() {
-            $0 < $1 }
-        
+            $0 < $1
+        }
+
         var smallestLat: Double = allLatArray[0]
         var smallestLong: Double = allLongArray[0]
+
         var biggestLat: Double = allLatArray[allLatArray.count-1]
         var biggestLong: Double = allLongArray[allLongArray.count-1]
+        
         var midPoint : CLLocationCoordinate2D = CLLocationCoordinate2DMake((biggestLat + smallestLat)/2, (biggestLong + smallestLong)/2)
+        
         var radius : MKCoordinateSpan = MKCoordinateSpanMake(biggestLat - smallestLat, biggestLong - smallestLong)
         var region : MKCoordinateRegion = MKCoordinateRegionMake(midPoint, radius)
        
         self.theMap.setRegion(region, animated: true)
-        
     }
 
     func handleWaypoints(waypoints: [Pin]) {
         theMap.addAnnotations(waypoints)
         theMap.showAnnotations(waypoints, animated: true)
     }
-//    override func viewDidAppear(animated: Bool) {
-//        super.viewDidAppear(animated)
-//        addPinToMapView()
-//    }
-//    func addPinToMapView() {
-//        var PreviousAnnotation = MKPointAnnotation()
-////        for var i = 0; i < pinAll.count; ++i {
-//            var pinLocation : CLLocationCoordinate2D = CLLocationCoordinate2DMake(pinAll[index].latitude, pinAll[i].longitude)
-//            PreviousAnnotation.coordinate = pinLocation
-//            PreviousAnnotation.title = pinAll[i].title
-//            PreviousAnnotation.subtitle = pinAll[i].subtitle
-//
-//            theMap.addAnnotation(PreviousAnnotation)
-////        }
-//
-//    }
-//    func parseJSON(inputData: NSData) -> NSArray {
-//        var error: NSError?
-//        var arrOfObjects = NSJSONSerialization.JSONObjectWithData(inputData, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSArray
-//        return arrOfObjects
-//    }
-//    var request = MKLocalSearchRequest()
-//    request.naturalLanguageQuery = @"Ike's"
     
     func locationManager(manager:CLLocationManager, didUpdateLocations locations:[AnyObject]) {
-//        userLocationUpdated = true
         theLabel.text = "\(locations[0])"
         myLocations.append(locations[0] as! CLLocation)
         let newLocation = locations.last as! CLLocation
-//        self.showPinsCenter()
+
 //        let spanX = 0.10
 //        let spanY = 0.10
 //        newRegion = MKCoordinateRegion(center: theMap.userLocation.coordinate, span: MKCoordinateSpanMake(spanX, spanY))
@@ -235,13 +200,29 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
             let c1 = myLocations[sourceIndex].coordinate
             let c2 = myLocations[destinationIndex].coordinate
             var a = [c1, c2]
-            var polyline = MKPolyline(coordinates: &a, count: a.count)
+            polyline = MKPolyline(coordinates: &a, count: a.count)
             theMap.addOverlay(polyline)
         }
     }
-//    func openInMapsWithLaunchOptions([NSObject:AnyObject]) -> true {
-//
+//    func createPolyline() {
+//        if (myLocations.count > 1){
+//            var sourceIndex = myLocations.count - 1
+//            var destinationIndex = myLocations.count - 2
+//            
+//            let c1 = myLocations[sourceIndex].coordinate
+//            let c2 = myLocations[destinationIndex].coordinate
+//            var a = [c1, c2]
+//            polyline = MKPolyline(coordinates: &a, count: a.count)
+////            createPolyline(polyline!)
+////            removePolyline(polyline!)
+//            theMap.addOverlay(polyline)
+//        }
 //    }
+//    func removePolyline(polyline: MKPolyline) {
+//        theMap.removeOverlay(polyline)
+//    }
+
+
     func stopLocationManager() {
         if userLocationUpdated {
             manager.stopUpdatingLocation()
@@ -254,7 +235,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         if overlay is MKPolyline {
             var polylineRenderer = MKPolylineRenderer(overlay: overlay)
             polylineRenderer.strokeColor = UIColor.blueColor()
-            polylineRenderer.lineWidth = 4
+            polylineRenderer.lineWidth = 5
             return polylineRenderer
         }
         return nil
@@ -269,87 +250,83 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         let reuseId = "test"
         var anView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId)
 //        anView.frameForAlignmentRect(CGRectMake(10, 10, 50, 50))
+      
         if anView == nil
         {
             anView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             anView!.canShowCallout = true
-            for pinImage in pinAll {
-                anView!.image = pinImage.photo
-            }
-//            anView!.image = pinAll.photo
+        } else {
+                anView!.annotation = annotation
+        }
             //            anView!.leftCalloutAccessoryView = imageView
             anView!.calloutOffset = CGPoint(x: -5, y: 5)
+       
             anView!.rightCalloutAccessoryView = UIButton.buttonWithType(UIButtonType.Custom) as! UIView
-            var delete = UIImageView(frame: CGRectMake(0, 0, 40, 40))
-            delete.image = UIImage(named: "delete")
-//            var pinImage : UIImage
-            
-            for pinImage in pinAll {
-                if (pinImage.photo != nil) {
-                    anView!.image = pinImage.photo
+            var reSizeDelete = UIImageView(frame: CGRectMake(0, 0, 40, 40))
+            var delete = UIImage(named: "delete")
+            var compDelete = LocationTrackerController.sharedInstance.createThumbnail(delete!)
+            reSizeDelete.image = compDelete
+        
 //                    var decodedData = NSData(base64EncodedString: pinImage.photo!, options: NSDataBase64DecodingOptions(rawValue: 0))
 //                    var decodedImage = UIImage(data: decodedData!)
                     //                pinImage = decodedImage!
                     //                pinImage.transform = CGAffineTransformMakeRotation((90.0 * CGFloat(M_PI)) / 180.0)
-                    anView!.annotation = annotation
-                    
 //                    anView!.image = decodedImage
-                    anView!.bounds.size.height = 50.0
-                    anView!.bounds.size.width = 40.0
-                    anView!.centerOffset = CGPointMake(0, 20)
-                    //                anView!.transform = CGAffineTransformMakeRotation((90.0 * CGFloat(M_PI)) / 180.0)
-                    //                cell.imageView!.transform = CGAffineTransformMakeRotation((90.0 * CGFloat(M_PI)) / 180.0)
-                    //                anView!.lineWidth = 2
-                    //                anView!.draggable = true
-                }
-                else {
-                    anView!.image = UIImage(named: "camera")
-                    anView!.bounds.size.height = 50.0
-                    anView!.bounds.size.width = 40.0
-                    anView!.centerOffset = CGPointMake(0, 20)
-                }
-//
+              
+        if let waypoint = annotation as? Pin {
+            if waypoint.photo != nil {
+                anView!.image = waypoint.photo
+                anView!.bounds.size.height = 50.0
+                anView!.bounds.size.width = 40.0
+                anView!.centerOffset = CGPointMake(0, 20)
+            } else {
+                anView!.image = UIImage(named: "camera")
+                anView!.bounds.size.height = 50.0
+                anView!.bounds.size.width = 40.0
+                anView!.centerOffset = CGPointMake(0, 20)
             }
+            
+        }
             anView!.rightCalloutAccessoryView.frame = CGRectMake(0, 0, 40, 40)
-            anView!.rightCalloutAccessoryView.tintColor = UIColor.redColor()
-            anView!.rightCalloutAccessoryView.addSubview(delete)
+            anView!.rightCalloutAccessoryView.backgroundColor = UIColor.whiteColor()
+            anView!.rightCalloutAccessoryView.addSubview(reSizeDelete)
+        
             anView!.leftCalloutAccessoryView = UIButton.buttonWithType(UIButtonType.System) as! UIView
             anView.leftCalloutAccessoryView.frame = CGRectMake(0, 0, 40, 40)
-            var zoomIn = UIImageView(frame: CGRectMake(0, 0, 40, 40))
-            zoomIn.image = UIImage(named: "zoomIn")
-            anView!.leftCalloutAccessoryView.addSubview(zoomIn)
-        }
-//        else
-//        {
-//            anView!.annotation = annotation
-//        }
+            anView!.leftCalloutAccessoryView.backgroundColor = UIColor.whiteColor()
+            var reSizeZoom = UIImageView(frame: CGRectMake(0, 0, 40, 40))
+            var zoomIn = UIImage(named: "zoomIn")
+            var compZoom = LocationTrackerController.sharedInstance.createThumbnail(zoomIn!)
+            reSizeZoom.image = compZoom
+            anView!.leftCalloutAccessoryView.addSubview(reSizeZoom)
+      //  }
         return anView
     }
-    func saveImageInPin() {
-        if let image = imageView.image {
-            if let imageData = UIImageJPEGRepresentation(image, 0.5) {
-             let fileManager = NSFileManager()
-                if let docsDir = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as? NSURL {
-                   let unique = NSDate.timeIntervalSinceReferenceDate()
-                    let url = docsDir.URLByAppendingPathComponent("\(unique).jpg")
-                    if let path = url.absoluteString {
-                        if imageData.writeToURL(url, atomically: true){
-//                            pinWithImage.photo = path
-                            println("hello")
-                        }
-                        
-                    }
-                }
-            }
-        }
-    }
+//    func saveImageInPin() {
+//        if let image = imageView.image {
+//            if let imageData = UIImageJPEGRepresentation(image, 0.5) {
+//             let fileManager = NSFileManager()
+//                if let docsDir = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as? NSURL {
+//                   let unique = NSDate.timeIntervalSinceReferenceDate()
+//                    let url = docsDir.URLByAppendingPathComponent("\(unique).jpg")
+//                    if let path = url.absoluteString {
+//                        if imageData.writeToURL(url, atomically: true){
+////                            pinWithImage.photo = path
+//
+//                        }
+//                        
+//                    }
+//                }
+//            }
+//        }
+//    }
     func mapView(mapView: MKMapView!, annotationView view: MKAnnotationView!, calloutAccessoryControlTapped control: UIControl!) {
         if (control as? UIButton)?.buttonType == UIButtonType.Custom {
             theMap.deselectAnnotation(view.annotation, animated: false)
             var refreshAlert = UIAlertController(title: "Delete annotations", message: "All pins will only desappear from the Map View!", preferredStyle: UIAlertControllerStyle.Alert)
             
             refreshAlert.addAction(UIAlertAction(title: "Selected", style: .Default, handler: { (action: UIAlertAction!) in
-                self.theMap.removeAnnotation(view.annotation as! MKPointAnnotation)
+                self.theMap.removeAnnotation(view.annotation as MKAnnotation)
           
             }))
             refreshAlert.addAction(UIAlertAction(title: "All", style: .Default, handler: { (action: UIAlertAction!) in
@@ -379,42 +356,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     func handleLongPress(getstureRecognizer : UIGestureRecognizer){
 //        dropPinPressed(sender: UIGestureRecognizer)
         if getstureRecognizer.state != .Began { return }
+            
+            let touchPoint = getstureRecognizer.locationInView(self.theMap)
+            let touchMapCoordinate = theMap.convertPoint(touchPoint, toCoordinateFromView: theMap)
+            var compImage = LocationTrackerController.sharedInstance.createThumbnail(imageView.image!)
+            let waypoint = Pin(title: new_title, subtitle: new_subtitle, coordinate: touchMapCoordinate, photo: compImage)
+            theMap.addAnnotation(waypoint)
         
-        let touchPoint = getstureRecognizer.locationInView(self.theMap)
-        let touchMapCoordinate = theMap.convertPoint(touchPoint, toCoordinateFromView: theMap)
-        
-//        lastPhoto()
-        var annotation = MKPointAnnotation()
-        annotation.coordinate = touchMapCoordinate
-//        newRegion = MKCoordinateRegion(center: annotation.coordinate, span: MKCoordinateSpanMake(500, 500))
-//        theMap.setRegion(newRegion!, animated: true)
-        annotation.title = new_title
-        annotation.subtitle = new_subtitle
-        mapView(theMap, viewForAnnotation: annotation)
-        //file system saving function starts here
-//        println(annotation.coordinate)
-        let newPin = Pin(pinTitle: annotation.title, pinSubtitle: annotation.subtitle, latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude, photo: imageView.image!)
+            let newPin = Pin(title: waypoint.title, subtitle: waypoint.subtitle, coordinate: waypoint.coordinate, photo: compImage)
             newPin.save()
-        //file system saving function ends here
-        
-        //save new item to db
-//            delegate?.viewController(self, didFinishAddingPin: newPin)
-    
-
-
-//            if let urlToReq = NSURL(string: "http://192.168.1.95:8000/pins") {
-//                var request: NSMutableURLRequest = NSMutableURLRequest(URL: urlToReq)
-//                request.HTTPMethod = "POST"
-//                var bodyData = "name=\(annotation.title)&subtitle=\(annotation.subtitle)&image=\(annotation.subtitle)&lat=\(annotation.coordinate.latitude)&long=\(annotation.coordinate.longitude)"
-//                println(bodyData)
-//                request.HTTPBody = bodyData.dataUsingEncoding(NSUTF8StringEncoding);
-//                NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {
-//                    (response, data, error) in
-//                    println(NSString(data: data, encoding: NSUTF8StringEncoding))
-//                }
-//            }
-        theMap.addAnnotation(annotation)
-//        delegate?.mainViewController(self, didFinishAddingPin: myAnnotations)
     }
 
     //----------------------------------------------------------------------------------
@@ -458,7 +408,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
                             if var theImage = image{
                                 var imageData = UIImagePNGRepresentation(theImage)
                                 imageView.image = theImage
-                                saveImageInPin()
+                                
+//                                saveImageInPin()
                                 
 //                                var base64String = imageData.base64EncodedStringWithOptions(.allZeros)
 //                                myPhotos.append(base64String)

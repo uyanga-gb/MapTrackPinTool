@@ -16,7 +16,6 @@ class PinsViewController: UITableViewController, CancelButtonDelegate, PinContro
 //    weak var cancelButtonDelegate: CancelButtonDelegate?
     var pinToEdit: Pin?
     
-    
     func cancelButtonPressedFrom(controller: UIViewController) {
         dismissViewControllerAnimated(true, completion: nil)
     }
@@ -25,25 +24,25 @@ class PinsViewController: UITableViewController, CancelButtonDelegate, PinContro
         super.viewDidLoad()
         tableView.reloadData()
 //        pins.removeAtIndex(2)
-        
     }
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let dequeued: AnyObject = tableView.dequeueReusableCellWithIdentifier("PinCell", forIndexPath: indexPath)
         let cell = dequeued as! UITableViewCell
-        cell.textLabel?.text = pins[indexPath.row].objTitle
-        cell.detailTextLabel?.text = pins[indexPath.row].objSubtitle
+        cell.textLabel?.text = pins[indexPath.row].title
+        cell.detailTextLabel?.text = pins[indexPath.row].subtitle
         var image : UIImage = UIImage(named: "camera")!
-        let photo = pins[indexPath.row].photo
-//        if let photo = pins[indexPath.row].photo {
+        var compImage = LocationTrackerController.sharedInstance.createThumbnail(image)
+        
+        if pins[indexPath.row].photo != nil {
 //            let decodedData = NSData(base64EncodedString: photo, options: NSDataBase64DecodingOptions(rawValue: 0))
 //            var decodedimage = UIImage(data: decodedData!)
-            if let image = photo {
-                var image : UIImage = photo!
+                var image : UIImage = pins[indexPath.row].photo!
 //                cell.imageView!.transform = CGAffineTransformMakeRotation((90.0 * CGFloat(M_PI)) / 180.0)
                 cell.imageView!.image = image
             }
             else {
-                cell.imageView!.image = UIImage(named: "camera")
+                cell.imageView!.image = compImage
             }
         return cell
     }
