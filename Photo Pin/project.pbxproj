@@ -18,7 +18,6 @@
 		F1BE99C11B127C1F00194B1D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1BE99BF1B127C1F00194B1D /* Main.storyboard */; };
 		F1BE99C31B127C1F00194B1D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1BE99C21B127C1F00194B1D /* Images.xcassets */; };
 		F1BE99C61B127C1F00194B1D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1BE99C41B127C1F00194B1D /* LaunchScreen.xib */; };
-		F1BE99D21B127C1F00194B1D /* LocationTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BE99D11B127C1F00194B1D /* LocationTrackerTests.swift */; };
 		F1BE99DC1B128F5800194B1D /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1BE99DB1B128F5800194B1D /* MapKit.framework */; };
 		F1C2AE471B21715100D34118 /* ViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C2AE461B21715100D34118 /* ViewControllerDelegate.swift */; };
 		F1C455A71B1FD42100FDBC5B /* RequestsFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C455A61B1FD42100FDBC5B /* RequestsFramework.swift */; };
@@ -41,16 +40,6 @@
 			script = "# builtin-copyPlist\n";
 		};
 /* End PBXBuildRule section */
-
-/* Begin PBXContainerItemProxy section */
-		F1BE99CC1B127C1F00194B1D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F1BE99AE1B127C1F00194B1D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F1BE99B51B127C1F00194B1D;
-			remoteInfo = LocationTracker;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		F12288B91B2A954400C8438E /* PinInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinInfoCell.swift; sourceTree = "<group>"; };
@@ -77,7 +66,6 @@
 		F1CADD291B1FED7B004D6781 /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
 		F1CADD2B1B20087B004D6781 /* PinControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinControllerDelegate.swift; sourceTree = "<group>"; };
 		F1D892BE1B62B88A00D5A707 /* LocationTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocationTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1D892BF1B62B88A00D5A707 /* LocationTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LocationTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1FCDC9A1B2A8DC800D0BE0E /* CancelButtonDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CancelButtonDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,13 +76,6 @@
 			files = (
 				F16525F71B34FA630024A345 /* CoreData.framework in Frameworks */,
 				F1BE99DC1B128F5800194B1D /* MapKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F1BE99C81B127C1F00194B1D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,7 +91,6 @@
 				F1BE99B81B127C1F00194B1D /* LocationTracker */,
 				F1BE99CE1B127C1F00194B1D /* LocationTrackerTests */,
 				F1D892BE1B62B88A00D5A707 /* LocationTracker.app */,
-				F1D892BF1B62B88A00D5A707 /* LocationTrackerTests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -186,24 +166,6 @@
 			productReference = F1D892BE1B62B88A00D5A707 /* LocationTracker.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F1BE99CA1B127C1F00194B1D /* LocationTrackerTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F1BE99D81B127C1F00194B1D /* Build configuration list for PBXNativeTarget "LocationTrackerTests" */;
-			buildPhases = (
-				F1BE99C71B127C1F00194B1D /* Sources */,
-				F1BE99C81B127C1F00194B1D /* Frameworks */,
-				F1BE99C91B127C1F00194B1D /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				F1BE99CD1B127C1F00194B1D /* PBXTargetDependency */,
-			);
-			name = LocationTrackerTests;
-			productName = LocationTrackerTests;
-			productReference = F1D892BF1B62B88A00D5A707 /* LocationTrackerTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -215,10 +177,6 @@
 				TargetAttributes = {
 					F1BE99B51B127C1F00194B1D = {
 						CreatedOnToolsVersion = 6.3;
-					};
-					F1BE99CA1B127C1F00194B1D = {
-						CreatedOnToolsVersion = 6.3;
-						TestTargetID = F1BE99B51B127C1F00194B1D;
 					};
 				};
 			};
@@ -236,7 +194,6 @@
 			projectRoot = "";
 			targets = (
 				F1BE99B51B127C1F00194B1D /* LocationTracker */,
-				F1BE99CA1B127C1F00194B1D /* LocationTrackerTests */,
 			);
 		};
 /* End PBXProject section */
@@ -249,13 +206,6 @@
 				F1BE99C11B127C1F00194B1D /* Main.storyboard in Resources */,
 				F1BE99C61B127C1F00194B1D /* LaunchScreen.xib in Resources */,
 				F1BE99C31B127C1F00194B1D /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F1BE99C91B127C1F00194B1D /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,23 +234,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F1BE99C71B127C1F00194B1D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F1BE99D21B127C1F00194B1D /* LocationTrackerTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		F1BE99CD1B127C1F00194B1D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F1BE99B51B127C1F00194B1D /* LocationTracker */;
-			targetProxy = F1BE99CC1B127C1F00194B1D /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		F1BE99BF1B127C1F00194B1D /* Main.storyboard */ = {
@@ -423,40 +357,6 @@
 			};
 			name = Release;
 		};
-		F1BE99D91B127C1F00194B1D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = LocationTrackerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LocationTracker.app/LocationTracker";
-			};
-			name = Debug;
-		};
-		F1BE99DA1B127C1F00194B1D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = LocationTrackerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LocationTracker.app/LocationTracker";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -474,15 +374,6 @@
 			buildConfigurations = (
 				F1BE99D61B127C1F00194B1D /* Debug */,
 				F1BE99D71B127C1F00194B1D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F1BE99D81B127C1F00194B1D /* Build configuration list for PBXNativeTarget "LocationTrackerTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F1BE99D91B127C1F00194B1D /* Debug */,
-				F1BE99DA1B127C1F00194B1D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
